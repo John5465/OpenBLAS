@@ -23,7 +23,7 @@ if (MSVC)
   set(FORTRAN_DIR "${ONEAPI_DIR}/compiler/latest")
   set(CMAKE_Fortran_COMPILER "${FORTRAN_DIR}/bin/ifx.exe")
   link_directories("${FORTRAN_DIR}/lib")
-  link_directories("${ONEAPI_DIR}/mkl/2025.3/lib")
+  link_directories("${ONEAPI_DIR}/mkl/latest/lib")
   set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
 endif ()
 
