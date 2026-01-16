@@ -18,6 +18,15 @@ include(GNUInstallDirs)
 
 include(CMakePackageConfigHelpers)
 
+if (MSVC)
+  set(ONEAPI_DIR "C:/Program Files (x86)/Intel/oneAPI")
+  set(FORTRAN_DIR "${ONEAPI_DIR}/compiler/latest")
+  set(CMAKE_Fortran_COMPILER "${FORTRAN_DIR}/bin/ifx.exe")
+  link_directories("${FORTRAN_DIR}/lib")
+  link_directories("${ONEAPI_DIR}/mkl/2025.3/lib")
+  set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
+endif ()
+
 #######
 option(BUILD_WITHOUT_LAPACK "Do not build LAPACK and LAPACKE (Only BLAS or CBLAS)" OFF)
 
@@ -62,7 +71,7 @@ option(CPP_THREAD_SAFETY_TEST "Run a massively parallel DGEMM test to confirm th
 
 option(CPP_THREAD_SAFETY_GEMV "Run a massively parallel DGEMV test to confirm thread safety of the library (requires OpenMP)" OFF)
 option(BUILD_STATIC_LIBS "Build static library" OFF)
-option(BUILD_SHARED_LIBS "Build shared library" OFF)
+option(BUILD_SHARED_LIBS "Build shared library" ON)
 if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
   set(BUILD_STATIC_LIBS ON CACHE BOOL "Build static library" FORCE)
 endif()
@@ -272,6 +281,9 @@ if(BUILD_SHARED_LIBS)
   add_library(${OpenBLAS_LIBNAME}_shared SHARED ${TARGET_OBJS} ${OpenBLAS_DEF_FILE})
   target_include_directories(${OpenBLAS_LIBNAME}_shared INTERFACE $<INSTALL_INTERFACE:include/openblas${SUFFIX64}>)
   list(APPEND OpenBLAS_LIBS ${OpenBLAS_LIBNAME}_shared)
+  if (MSVC)
+    target_link_libraries(${OpenBLAS_LIBNAME}_shared mkl_rt.lib)
+  endif()
 endif()
 if(BUILD_STATIC_LIBS)
   add_library(${OpenBLAS_LIBNAME} ALIAS ${OpenBLAS_LIBNAME}_static)
