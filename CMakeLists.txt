@@ -13,6 +13,17 @@ set(OpenBLAS_PATCH_VERSION 31.dev)
 
 set(OpenBLAS_VERSION "${OpenBLAS_MAJOR_VERSION}.${OpenBLAS_MINOR_VERSION}.${OpenBLAS_PATCH_VERSION}")
 
+if(MSVC)
+  message(STATUS "---- Compiling Using MSVC")
+  cmake_policy(SET CMP0091 NEW)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+  #set(SYMBOL_UPPER ON CACHE BOOL "Make symbols uppercase")
+  #add_compile_definitions(
+  #  F_INTERFACE_UPPER
+  #  F_INTERFACE_NOMANGLE
+  #)
+  #set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /names:uppercase")
+endif()
 # Adhere to GNU filesystem layout conventions
 include(GNUInstallDirs)
 
@@ -71,7 +82,7 @@ option(CPP_THREAD_SAFETY_TEST "Run a massively parallel DGEMM test to confirm th
 
 option(CPP_THREAD_SAFETY_GEMV "Run a massively parallel DGEMV test to confirm thread safety of the library (requires OpenMP)" OFF)
 option(BUILD_STATIC_LIBS "Build static library" OFF)
-option(BUILD_SHARED_LIBS "Build shared library" ON)
+option(BUILD_SHARED_LIBS "Build shared library" OFF)
 if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
   set(BUILD_STATIC_LIBS ON CACHE BOOL "Build static library" FORCE)
 endif()
