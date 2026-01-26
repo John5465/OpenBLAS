@@ -36,6 +36,9 @@ if (MSVC)
   link_directories("${FORTRAN_DIR}/lib")
   link_directories("${ONEAPI_DIR}/mkl/latest/lib")
   set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
+
+  set(USE_OPENMP ON)
+  set(INTERFACE64 OFF)
 endif ()
 
 #######
