@@ -37,7 +37,7 @@ if (MSVC)
   link_directories("${ONEAPI_DIR}/mkl/latest/lib")
   set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
 
-  set(USE_OPENMP ON)
+  set(USE_OPENMP OFF)
   set(INTERFACE64 OFF)
 endif ()
 
